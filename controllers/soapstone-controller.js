@@ -2,8 +2,9 @@ var router = require('express').Router();
 const Soapstone = require('../db').import('../models/soapstone');
 
 router.post('/create', (req, res) => {
+  console.log(req.body.log)
   Soapstone.create({
-    tip: req.body.item.tip
+    tip: req.body.log.result
   })
   .then(
     function createSuccess(newSoapstone){
@@ -13,7 +14,7 @@ router.post('/create', (req, res) => {
       })
     },
     function createFail(err){
-      res.status(500).send("YOU DIED")
+      res.status(500).send(err.message)
     }
   )
 })
