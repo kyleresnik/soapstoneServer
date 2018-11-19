@@ -50,7 +50,7 @@ router.post('/create', function (req, res) {
 })
 
 //Get single soapstone for individual user
-router.get('/:id', function (req, res) {
+router.get('/get/:id', function (req, res) {
   var data = req.params.id;
   var userid = req.user.id;
 

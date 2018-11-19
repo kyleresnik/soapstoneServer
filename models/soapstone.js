@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('soaptext', {
+  return sequelize.define('soapstone', {
     soaptext: DataTypes.STRING,
     owner: DataTypes.INTEGER
   });
