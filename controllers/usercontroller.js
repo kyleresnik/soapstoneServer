@@ -6,10 +6,8 @@ var User = sequelize.import('../models/user');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
-/*******************************
- * Create User Endpoint: Starter
- *******************************/
-router.post('/createuser', function(req, res){
+//Create user
+router.post('/signup', function(req, res){
   var username = req.body.user.username;
   var pass = req.body.user.password;
 
@@ -44,7 +42,7 @@ router.post('/signin', function(req, res){
               sessionToken: token
             });
           } else {
-            res.status(502).send({ error: "you failed, yo" });
+            res.status(502).send({ error: "Authentication failed" });
           }
         });
       } else {

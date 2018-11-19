@@ -1,12 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
-  const Soapstone = sequelize.define('soapstone', {
-    tip: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [5, 300]
-      }
-    }
-  })
-  return Soapstone;
-}
+  return sequelize.define('soaptext', {
+    soaptext: DataTypes.STRING,
+    owner: DataTypes.INTEGER
+  });
+};
+
+// soaptext: {
+//   owner: DataTypes.INTEGER,
+//   type: DataTypes.STRING,
+//   allowNull: false,
+// })
+// return Soapstone;
