@@ -87,8 +87,9 @@ router.put('/update/:id', (req, res) => {
 
 //Delete soapstone for individual user
 router.delete('/delete/:id', validateSession, function (req, res) {
-  let dataID = req.body.soapstone.id;
-
+  // let dataID = req.soapstone.id;
+  let dataID = req.params.id;
+  
   Soapstone.destroy({ where: { id: dataID } })
     .then(
       function createDeleteSuccess() {
