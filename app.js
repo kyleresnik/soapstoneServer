@@ -7,7 +7,6 @@ var bodyParser = require('body-parser')
 
 //CONTROLLERS
 const test = require('./controllers/testcontroller');
-const authTest = require('./controllers/authtestcontroller');
 const user = require('./controllers/usercontroller');
 const soapstone = require('./controllers/soapstone-controller');
 
@@ -27,5 +26,6 @@ app.use(require('./middleware/validate-session'));
 app.use('/soapstone', soapstone);
 
 //LISTEN
-app.listen(process.env.PORT, 
-  () => console.log(`Listening on ${process.env.PORT}`));
+app.listen(process.env.PORT, function(req, res){
+  console.log(`Listening on ${process.env.PORT}`);
+})

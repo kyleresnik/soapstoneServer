@@ -1,17 +1,11 @@
-var router = require('express').Router();
-var sequelize = require('../db')
-var User = sequelize.import('../models/user');
-var Soapstone = require('../db').import('../models/soapstone');
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcrypt');
-
-//Handshake
-router.get('/', function(req, res) {
-  res.send("Soapstone handshake successful!")
-})
+let express = require('express');
+var router = express.Router();
+var sequelize = require('../db');
+let validateSession = require('../middleware/validate-session');
+var Soapstone = sequelize.import('../models/soapstone');
 
 //Get all soapstones for single user
-router.get('/getall', function(req, res) {
+router.get('/get', function(req, res) {
   var userid = req.user.id;
 
   Soapstone
@@ -29,82 +23,81 @@ router.get('/getall', function(req, res) {
 });
 
 //Post new soapstone
-router.post('/create', function (req, res) {
-  var owner = req.user.id;
-  var soapTextData = req.body.soapstone.soaptext;
+router.post('/create', validateSession, (req, res) => {
+  if (!req.error) {
+    let owner = req.user.id;
+    let soapTextData = req.body.soapstone.soaptext;
 
-  Soapstone.create({
-    soaptext: soapTextData,
-    owner: owner
-  })
-  .then(
-    function createSuccess(soaptextdata){
-      res.status(200).json({
-        soaptextdata: soaptextdata
-      });
-    },
-    function createError(err){
-      res.status(500, err.message);
-    }
-  )
-})
+    Soapstone.create({
+      owner: owner,
+      soaptext: soapTextData
+    })
+    .then(
+      function createSoapSuccess(){
+        res.status(200).json({
+          soaptextdata: soapTextData
+        });
+      },
+      function createSoapError(err){
+        res.status(500, err.message);
+      }
+    )
+  }
+});
 
 //Get single soapstone for individual user
-router.get('/get/:id', function (req, res) {
-  var data = req.params.id;
-  var userid = req.user.id;
+// router.get('/get/:id', function (req, res) {
+//   var data = req.params.id;
+//   var userid = req.user.id;
 
-  Soapstone
-    .findOne({
-      where: { id: data, owner: userid }
-    }).then(
-      function findOneSuccess(data) {
-        res.json(data);
-      },
-      function findOneError(err) {
-        res.send(500, err.message);
-      }
-    );
-})
+//   Soapstone
+//     .findOne({
+//       where: { id: data, owner: userid }
+//     }).then(
+//       function findOneSuccess(data) {
+//         res.json(data);
+//       },
+//       function findOneError(err) {
+//         res.send(500, err.message);
+//       }
+//     );
+// })
 
 //Update soapstone for individual user
 router.put('/update/:id', (req, res) => {
-  var data = req.params.id;
-  var soaptextdata = req.body.soaptextdata;
+  if (!req.error) {
+    let dataID = req.user.id;
+    let soapTextData = req.body.soapstone.soaptext;
 
-  Soapstone
-    .update({
-      soaptextdata: soaptextdata
-    },
-    {where: {id: data}}
-    ).then(
-      function updateSuccess(Soapstone) {
+    Soapstone.update({
+      soaptext: soapTextData
+    }, { where: { id: dataID } } )
+    .then(
+      function updateSuccess() {
         res.json({
-          soaptextdata: soaptextdata
+          soaptext: soapTextData
         });
       },
       function updateError(err){
         res.send(500, err.message);
       }
     )
+  }
 });
 
 //Delete soapstone for individual user
-router.delete('/delete/:id', function(req, res) {
-  var data = req.params.id;
-  var userid = req.user.id;
+router.delete('/delete/:id', validateSession, function (req, res) {
+  let dataID = req.body.soapstone.id;
 
-  Soapstone
-    .destroy({
-      where: { id: data, owner: userid }
-    }).then(
-      function deleteSoapSuccess(data){
-        res.send("Successfully deleted");
+  Soapstone.destroy({ where: { id: dataID } })
+    .then(
+      function createDeleteSuccess() {
+        res.status(200).send("Successfully deleted Soapstone!")
       },
-      function deleteSoapError(err){
-        res.send(500, err.message);
+      function createDeleteError(err) {
+        res.send(500, err.message)
       }
     )
-})
+});
 
 module.exports = router;
