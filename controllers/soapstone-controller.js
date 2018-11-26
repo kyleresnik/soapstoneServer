@@ -6,11 +6,9 @@ var Soapstone = sequelize.import('../models/soapstone');
 
 //Get all soapstones for single user
 router.get('/get', function(req, res) {
-  var userid = req.user.id;
 
   Soapstone
     .findAll({
-      where: { owner: userid }
     })
     .then(
       function findAllSuccess(data){
@@ -24,26 +22,47 @@ router.get('/get', function(req, res) {
 
 //Post new soapstone
 router.post('/create', validateSession, (req, res) => {
-  if (!req.error) {
-    let owner = req.user.id;
-    let soapTextData = req.body.soapstone.soaptext;
 
-    Soapstone.create({
-      owner: owner,
-      soaptext: soapTextData
-    })
-    .then(
-      function createSoapSuccess(){
-        res.status(200).json({
-          soaptext: soapTextData
-        });
+      Soapstone
+      .create({
+         soaptext: req.body.soapstone.soaptext,
+      })
+      .then(function(logData){
+          res.send(logData);
       },
-      function createSoapError(err){
-        res.status(500, err.message);
+      function(err) {
+          console.log(err);
       }
-    )
-  }
-});
+  )}
+);
+// router.post('/create', validateSession, (req, res) => {
+//   if (!req.error) {
+//     // let owner = req.user.id;
+//     let soapTextData = req.body.soapstone.soaptext;
+
+//     Soapstone.create({
+//       // owner: owner,
+//       soaptext: soapTextData
+//     })
+//     .then(function(logData){
+//       res.send(logData);
+//   },
+//   function(err) {
+//       console.log(err);
+//   }
+// )
+//     // .then(
+//     //   function createSoapSuccess(){
+//     //     res.status(200).json({
+//     //       soaptext: soapTextData
+//     //     });
+//     //   },
+//     //   function createSoapError(err){
+//     //     res.status(500, err.message);
+//     //   }
+//     // )
+//   }
+// });
 
 //Get single soapstone for individual user
 // router.get('/get/:id', function (req, res) {

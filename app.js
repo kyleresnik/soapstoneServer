@@ -20,7 +20,7 @@ app.use('/test', test);
 app.use('/user', user);
 
 //VALIDATION
-// app.use(require('./middleware/validate-session'));
+app.use(require('./middleware/validate-session'));
 
 //PROTECTED ROUTES
 app.use('/soapstone', soapstone);
