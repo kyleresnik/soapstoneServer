@@ -85,8 +85,10 @@ router.post('/create', validateSession, (req, res) => {
 //Update soapstone for individual user
 router.put('/update/:id', (req, res) => {
   if (!req.error) {
-    let dataID = req.user.id;
+    let dataID = req.params.id;
     let soapTextData = req.body.soapstone.soaptext;
+    console.log(req.user.id, 'this is the user id');
+    console.log(req.params.id, 'this is the parameters id');
 
     Soapstone.update({
       soaptext: soapTextData
