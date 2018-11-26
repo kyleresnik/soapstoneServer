@@ -35,7 +35,7 @@ router.post('/create', validateSession, (req, res) => {
     .then(
       function createSoapSuccess(){
         res.status(200).json({
-          soaptextdata: soapTextData
+          soaptext: soapTextData
         });
       },
       function createSoapError(err){
