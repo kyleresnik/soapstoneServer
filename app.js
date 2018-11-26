@@ -11,7 +11,7 @@ const user = require('./controllers/usercontroller');
 const soapstone = require('./controllers/soapstone-controller');
 
 //MIDDLEWARE
-sequelize.sync({force: true}); //{force: true} for resetting tables
+sequelize.sync(); //{force: true} for resetting tables
 app.use(bodyParser.json());
 app.use(require('./middleware/headers'));
 
